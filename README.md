@@ -13,3 +13,8 @@ Mais especificamente, considerando um conjunto de locais de interesse, vamos res
 - com que frequencia um evento sístimo de intensidade maior ou igual a 5 ocorre a menos de 200km destes pontos de interesse?
 - qual destes pontos de interesse foi o mais afetado nos últimos 20 anos?
 - 
+
+Links importantes:
+Documentação da API do USGS:
+query: https://earthquake.usgs.gov/fdsnws/event/1/
+output: https://earthquake.usgs.gov/data/comcat/index.php
