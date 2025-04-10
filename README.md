@@ -4,14 +4,17 @@
 
 ## Contexto
 A Colômbia é um país da América do Sul localizado sobre a cadeia dos Andes, uma região montanhosa geologicamente instável, com elevada ocorrência de eventos sísmicos.
-_Ver mais em: https://www.dadosmundiais.com/america/colombia/terremotos.php#:~:text=Terremotos%20fortes%20ocorrem%20com%20relativa,s%C3%A3o%20um%20pouco%20mais%20fracas._
 
 Ao mesmo tempo, é um importante produtor e consumidor de petróleo, gás e derivados de petróleo, com uma extensa rede de oleodutos e gasodutos para transporte deste produtos, além de terminais de transporte e tanques de estocagem. Como destaque, o Oleoducto Central é um oleoduto de petróleo bruto, que começa em Cusiana, região produtora, e vai até o terminal marítimo de Coveñas, no Caribe.
-_Ver mais em: https://www.ceicdata.com/pt/indicator/colombia/crude-oil-production._
+<img src="./Oleoducto_Central.png">
+
 _Ver mais em: https://en-m-wikipedia-org.translate.goog/wiki/Ocensa_pipeline?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=sge#:~:text=O%20oleoduto%20Ocensa%20(%20Oleoducto%20Central,SA%20%2C%20Petrominerales%20e%20Triton%20Colombia._ 
 
 Sabemos que os eventos sísmicos representam um perigo importante para a integridade desta malha logística, especialmente os dutos. De fato, terremotos podem provocar deslizamentos de terra. Caso haja algum duto instalado na área afetada pelo terremoto, diferentes anomalias podem surgir, como amassamentos ou mossas, enrugamento e até mesmo trincas ou rupturas decorrentes dos esforços mecânicos aplicados ao duto. Há muito esforço de pesquisa e desenvolvimento e aplicação de tecnologia para proteger a infraestrutura de transporte de óleo e gás desses riscos geotécnicos.
-_Ver mais em: https://asmedigitalcollection.asme.org/ipg_ 
+[clique aqui para saber mais]([https://exemplo.com/](https://asmedigitalcollection.asme.org/ipg))
+
+
+
 
 ## Objetivos deste trabalho
 O objetivo deste trabalho é criar um _pipeline_ de dados que nos permita responder a algumas perguntas relacionadas à ocorrência de terremotos na Colômbia e potenciais impactos na infraestrutura de transporte de óleo, especificamente nas estações que fazem parte do Oleoducto Central. 
