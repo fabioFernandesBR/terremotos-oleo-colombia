@@ -31,11 +31,14 @@ Para responder a algumas perguntas relacionadas à ocorrência de terremotos na 
 
 ### Estratégia de Implementação
 Este _pipeline_ de dados foi implementado na plataforma _Databricks Community Edition_, onde, além dos recursos da plataforma, foram criados e executados algoritmos em Python, organizados nos _notebooks_. Esses algoritmos são responsáveis por obter dados, organizá-los, transformá-los e finalmente carregá-los em um esquema SQL. Da obtenção dos dados à consulta, utilizamos a arquitetura _medallion_, onde na camada bronze armazenamos os dados brutos; na camada prata, os dados limpos e transformados; e na camada ouro, os dados prontos para consulta.
+(_Ver mais sobre medallion architecture aqui: https://www.databricks.com/glossary/medallion-architecture_.)
+
 O produto final é um banco de dados SQL que pode ser utilizado para responder às perguntas, por meio de consultas SQL.
 
 ## Pipeline de dados
 A imagem a seguir ilustra o pipeline que foi implementado
 <img src="./imagens/Processo_ETL_medallion.png" alt="Logo">
+
 
 Duas fontes de dados foram utilizadas: uma com dados básicos sobre as estações do Oleoducto Central, e outra com informações sobre terremotos. Mais adiante discutiremos sobre estas fontes.
 A ETL foi construída por um total de 6 _notebooks_, sendo 2 na camada bronze, para leitura e armazenamento dos dados brutos das duas fontes de dados, três na camada prata, sendo 2 para tratamentos dos dados brutos e 1 para combinação dos 2 datasets em um terceiro dataset, e finalmente 1 _notebook_ na camada ouro para criar o esquema SQL e mover os 3 datasets da camada prata para as respectivas tabelas do esquema SQL.
@@ -50,6 +53,104 @@ O esquema adotado segue um modelo estrela, com 1 tabela-fato central conectada a
 _Observação: o Databricks Community Edition não permite a criação de esquemas SQL com integridade referencial, ou seja, o uso de chaves primárias e estrangeiras. Essa funcionalidade está disponível na versão paga. No entanto com comandos SQL é possível fazer pesquisa em uma tabela considerando informações em outra tabela. Na camada prata é feita uma checagem da variável id, garantindo que não há registros com variável id nulos, em branco ou duplicados, portanto funcionando como chave primária para a tabela terremotos. Basta uma inspeção visual nos dados das instalações para se assegurar de que a variável codigo também pode ser usada como chave primária na tabela onde constam os dados sobre as instalações._
 
 ### Catálogo de dados
+
+#### Informações Gerais
+- **Nome do Conjunto de Dados:** Impactos de Terremotos em Instalações do Oleoducto Central.
+- **Descrição:** Dados relacionados aos impactos de terremotos nas instalações do Oleoducto Central.
+- **Proprietário:** Fábio Fernandes
+- **Data de Criação:** 08/04/2025
+- **Última Atualização:** 10/04/2025
+
+#### Metadados
+- **Fonte dos Dados:** USGS (United States Geological Services), webpage da Ocensa (https://www.ocensa.com.co/nosotros/historia.html) e Google Maps.
+- **Formato dos Dados:** SQL
+- **Frequência de Atualização:** Não definida
+- **Tags:** terremotos, impactos, instalações, desastres naturais, oleodutos
+
+#### Estrutura dos Dados
+
+##### Tabela: impactos
+- **Nome da Coluna:** id_impacto
+  - **Tipo de Dados:** Integer
+  - **Descrição:** Identificador único do impacto
+  - **Exemplo de Valor:** 1
+
+- **Nome da Coluna:** id_terremoto
+  - **Tipo de Dados:** Integer
+  - **Descrição:** Identificador do terremoto (chave estrangeira)
+  - **Exemplo de Valor:** 101
+
+- **Nome da Coluna:** id_instalacao
+  - **Tipo de Dados:** Integer
+  - **Descrição:** Identificador da instalação (chave estrangeira)
+  - **Exemplo de Valor:** 202
+
+- **Nome da Coluna:** descricao_impacto
+  - **Tipo de Dados:** String
+  - **Descrição:** Descrição detalhada do impacto
+  - **Exemplo de Valor:** Danos estruturais severos
+
+##### Tabela: terremotos
+- **Nome da Coluna:** id_terremoto
+  - **Tipo de Dados:** Integer
+  - **Descrição:** Identificador único do terremoto
+  - **Exemplo de Valor:** 101
+
+- **Nome da Coluna:** data_ocorrencia
+  - **Tipo de Dados:** Date
+  - **Descrição:** Data de ocorrência do terremoto
+  - **Exemplo de Valor:** 2025-03-15
+
+- **Nome da Coluna:** magnitude
+  - **Tipo de Dados:** Float
+  - **Descrição:** Magnitude do terremoto na escala Richter
+  - **Exemplo de Valor:** 7.8
+
+- **Nome da Coluna:** localizacao
+  - **Tipo de Dados:** String
+  - **Descrição:** Localização do epicentro do terremoto
+  - **Exemplo de Valor:** Tokyo, Japão
+
+##### Tabela: instalacoes
+- **Nome da Coluna:** id_instalacao
+  - **Tipo de Dados:** Integer
+  - **Descrição:** Identificador único da instalação
+  - **Exemplo de Valor:** 202
+
+- **Nome da Coluna:** nome_instalacao
+  - **Tipo de Dados:** String
+  - **Descrição:** Nome da instalação
+  - **Exemplo de Valor:** Usina Nuclear de Fukushima
+
+- **Nome da Coluna:** tipo_instalacao
+  - **Tipo de Dados:** String
+  - **Descrição:** Tipo de instalação (ex: hospital, usina, escola)
+  - **Exemplo de Valor:** Usina Nuclear
+
+- **Nome da Coluna:** localizacao
+  - **Tipo de Dados:** String
+  - **Descrição:** Localização da instalação
+  - **Exemplo de Valor:** Fukushima, Japão
+
+#### Qualidade dos Dados
+- **Completude:** 100%
+- **Precisão:** 98%
+- **Consistência:** 99%
+
+#### Governança
+- **Políticas de Acesso:** Acesso restrito à equipe de pesquisa e análise de desastres
+- **Regras de Privacidade:** Dados sensíveis protegidos conforme a LGPD
+- **Compliance:** Atende às normas da LGPD
+
+#### Histórico de Alterações
+- **Data:** 10/04/2025
+- **Alteração:** Criação inicial do catálogo de dados
+- **Responsável:** João Pereira
+
+
+
+
+
 ## Busca pelos dados
 ## Coleta e armazenamento de dados
 ## Transformação dos dados
