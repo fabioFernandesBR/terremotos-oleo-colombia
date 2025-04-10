@@ -35,7 +35,7 @@ O produto final é um banco de dados SQL que pode ser utilizado para responder �
 
 ## Pipeline de dados
 A imagem a seguir ilustra o pipeline que foi implementado
-<img src="./Processo_ETL_medallion.png" alt="Logo">
+<img src="./imagens/Processo_ETL_medallion.png" alt="Logo">
 
 Duas fontes de dados foram utilizadas: uma com dados básicos sobre as estações do Oleoducto Central, e outra com informações sobre terremotos. Mais adiante discutiremos sobre estas fontes.
 A ETL foi construída por um total de 6 _notebooks_, sendo 2 na camada bronze, para leitura e armazenamento dos dados brutos das duas fontes de dados, três na camada prata, sendo 2 para tratamentos dos dados brutos e 1 para combinação dos 2 datasets em um terceiro dataset, e finalmente 1 _notebook_ na camada ouro para criar o esquema SQL e mover os 3 datasets da camada prata para as respectivas tabelas do esquema SQL.
