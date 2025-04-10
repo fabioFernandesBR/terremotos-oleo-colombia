@@ -62,7 +62,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 - **Última Atualização:** 10/04/2025
 
 #### Metadados
-- **Fonte dos Dados:** USGS (United States Geological Services), webpage da Ocensa (https://www.ocensa.com.co/nosotros/historia.html) e Google Maps.
+- **Fonte dos Dados:** USGS (United States Geological Survey - https://www.usgs.gov/), webpage da Ocensa (https://www.ocensa.com.co/nosotros/historia.html) e Google Maps (https://www.google.com/maps/).
 - **Formato dos Dados:** SQL
 - **Frequência de Atualização:** Não definida
 - **Tags:** terremotos, impactos, instalações, desastres naturais, oleodutos
@@ -70,82 +70,97 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 #### Estrutura dos Dados
 
 ##### Tabela: impactos
-- **Nome da Coluna:** id_impacto
-  - **Tipo de Dados:** Integer
-  - **Descrição:** Identificador único do impacto
-  - **Exemplo de Valor:** 1
-
-- **Nome da Coluna:** id_terremoto
-  - **Tipo de Dados:** Integer
-  - **Descrição:** Identificador do terremoto (chave estrangeira)
-  - **Exemplo de Valor:** 101
-
-- **Nome da Coluna:** id_instalacao
-  - **Tipo de Dados:** Integer
+- **Nome da Coluna:** instalacoes_cod
+  - **Tipo de Dados:** VARCHAR(8)
   - **Descrição:** Identificador da instalação (chave estrangeira)
+  - **Exemplo de Valor:** COV
+
+- **Nome da Coluna:** terremotos_id
+  - **Tipo de Dados:** VARCHAR(255)
+  - **Descrição:** Identificador do terremoto (chave estrangeira)
+  - **Exemplo de Valor:** at00sthakw
+
+- **Nome da Coluna:** distancia
+  - **Tipo de Dados:** DOUBLE
+  - **Descrição:** Distância calculada entre o epicentro do terremoto (coordenadas latitude e longitude) e as coordenadas latitude e longitude da instalação.
   - **Exemplo de Valor:** 202
 
-- **Nome da Coluna:** descricao_impacto
-  - **Tipo de Dados:** String
-  - **Descrição:** Descrição detalhada do impacto
-  - **Exemplo de Valor:** Danos estruturais severos
-
 ##### Tabela: terremotos
-- **Nome da Coluna:** id_terremoto
-  - **Tipo de Dados:** Integer
+- **Nome da Coluna:** id
+  - **Tipo de Dados:** VARCHAR(255)
   - **Descrição:** Identificador único do terremoto
-  - **Exemplo de Valor:** 101
+  - **Exemplo de Valor:** at00sthakw
 
-- **Nome da Coluna:** data_ocorrencia
+- **Nome da Coluna:** data
   - **Tipo de Dados:** Date
   - **Descrição:** Data de ocorrência do terremoto
   - **Exemplo de Valor:** 2025-03-15
 
-- **Nome da Coluna:** magnitude
-  - **Tipo de Dados:** Float
-  - **Descrição:** Magnitude do terremoto na escala Richter
+- **Nome da Coluna:** prop_mag
+  - **Tipo de Dados:** Double
+  - **Descrição:** Magnitude do terremoto
   - **Exemplo de Valor:** 7.8
 
-- **Nome da Coluna:** localizacao
-  - **Tipo de Dados:** String
-  - **Descrição:** Localização do epicentro do terremoto
-  - **Exemplo de Valor:** Tokyo, Japão
+- **Nome da Coluna:** prop_url
+  - **Tipo de Dados:** VARCHAR(1024)
+  - **Descrição:** URL para o cadastro do terremoto no site do USGS, onde o usuário poderá buscar informações mais detalhadas sobre o evento.
+  - **Exemplo de Valor:** https://earthquak
+ 
+- **Nome da Coluna:** latitude
+  - **Tipo de Dados:** DOUBLE
+  - **Descrição:** latitude da ocorrência do terremoto
+  - **Exemplo de Valor:** 7.2
+ 
+- **Nome da Coluna:** longitude
+  - **Tipo de Dados:** DOUBLE
+  - **Descrição:** longitude da ocorrência do terremoto
+  - **Exemplo de Valor:** -82.3
+ 
+- **Nome da Coluna:** pais
+  - **Tipo de Dados:** VARCHAR(255)
+  - **Descrição:** país onde o terremoto se originou
+  - **Exemplos de Valor:** Desconhecido, Colombia, Venezuela
 
 ##### Tabela: instalacoes
-- **Nome da Coluna:** id_instalacao
-  - **Tipo de Dados:** Integer
-  - **Descrição:** Identificador único da instalação
-  - **Exemplo de Valor:** 202
+- **Nome da Coluna:** codigo
+  - **Tipo de Dados:** VARCHAR(8)
+  - **Descrição:** Código identificador único da instalação
+  - **Exemplo de Valor:** COV
 
-- **Nome da Coluna:** nome_instalacao
-  - **Tipo de Dados:** String
+- **Nome da Coluna:** instalacao
+  - **Tipo de Dados:** VARCHAR(255)
   - **Descrição:** Nome da instalação
-  - **Exemplo de Valor:** Usina Nuclear de Fukushima
+  - **Exemplo de Valor:** Terminal Coveñas
 
-- **Nome da Coluna:** tipo_instalacao
-  - **Tipo de Dados:** String
-  - **Descrição:** Tipo de instalação (ex: hospital, usina, escola)
-  - **Exemplo de Valor:** Usina Nuclear
-
-- **Nome da Coluna:** localizacao
-  - **Tipo de Dados:** String
-  - **Descrição:** Localização da instalação
-  - **Exemplo de Valor:** Fukushima, Japão
+- **Nome da Coluna:** operador
+  - **Tipo de Dados:** VARCHAR(255) 
+  - **Descrição:** Empresa que opera a instalação
+  - **Exemplo de Valor:** Ocensa
+ 
+- **Nome da Coluna:** latitude_instalacao
+  - **Tipo de Dados:** DOUBLE
+  - **Descrição:** latitude da localização da instalação
+  - **Exemplo de Valor:** 9.409136280745889
+ 
+- **Nome da Coluna:** longitude_instalacao
+  - **Tipo de Dados:** DOUBLE
+  - **Descrição:** longitude da localização da instalação
+  - **Exemplo de Valor:** -75.70015297027714
 
 #### Qualidade dos Dados
-- **Completude:** 100%
-- **Precisão:** 98%
+- **Completude:** 100% dos dados sobre as instalações que compõem o Oleoducto Central, 100% dos dados sobre os terremotos com magnitude >= 5 cuja ocorrência tem epicentro em um raio de até 1000km de um ponto central da Colômbia.
+- **Precisão:** Não temos informaçõe
 - **Consistência:** 99%
 
 #### Governança
-- **Políticas de Acesso:** Acesso restrito à equipe de pesquisa e análise de desastres
-- **Regras de Privacidade:** Dados sensíveis protegidos conforme a LGPD
-- **Compliance:** Atende às normas da LGPD
+- **Políticas de Acesso:** A base de dados SQL está disponível apenas na minha conta no Databricks Community Edition, porém o arquivo csv com informações sobre as instalações está disponível neste repositório (aqui) e nos _notebooks_ estão os códigos para leitura de dados, inclusive da API da USGS, todo o processamento das camadas bronze, prata e ouro, portanto é possível replicar a criação da base de dados SQL.
+- **Regras de Privacidade:** Dados públicos.
+- **Compliance:** Atende às normas da LGPD.
 
 #### Histórico de Alterações
 - **Data:** 10/04/2025
-- **Alteração:** Criação inicial do catálogo de dados
-- **Responsável:** João Pereira
+- **Alteração:** Nova execução dos _notebooks_, com potencial atualização da base de dados, em caso de ocorrência de algum terremoto que atenda aos critérios de busca estabelecidos.
+- **Responsável:** Fábio Fernandes
 
 
 
