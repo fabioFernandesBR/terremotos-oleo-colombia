@@ -104,7 +104,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 - **Nome da Coluna:** prop_url
   - **Tipo de Dados:** VARCHAR(1024)
   - **Descrição:** URL para o cadastro do terremoto no site do USGS, onde o usuário poderá buscar informações mais detalhadas sobre o evento.
-  - **Exemplo de Valor:** https://earthquak
+  - **Exemplo de Valor:** [https://earthquak](https://earthquake.usgs.gov/earthquakes/eventpage/at00sthakw/executive)
  
 - **Nome da Coluna:** latitude
   - **Tipo de Dados:** DOUBLE
@@ -149,8 +149,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 
 #### Qualidade dos Dados
 - **Completude:** 100% dos dados sobre as instalações que compõem o Oleoducto Central, 100% dos dados sobre os terremotos com magnitude >= 5 cuja ocorrência tem epicentro em um raio de até 1000km de um ponto central da Colômbia.
-- **Precisão:** Não temos informaçõe
-- **Consistência:** 99%
+- **A qualidade dos dados é altamente dependente da qualidade dos dados disponibilizados pela USGS por meio de sua API.
 
 #### Governança
 - **Políticas de Acesso:** A base de dados SQL está disponível apenas na minha conta no Databricks Community Edition, porém o arquivo csv com informações sobre as instalações está disponível neste repositório (aqui) e nos _notebooks_ estão os códigos para leitura de dados, inclusive da API da USGS, todo o processamento das camadas bronze, prata e ouro, portanto é possível replicar a criação da base de dados SQL.
