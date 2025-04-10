@@ -26,6 +26,8 @@ O objetivo deste trabalho é criar um _pipeline_ de dados que nos permita respon
 Este _pipeline_ de dados será implementado na plataforma _Databricks Community Edition_, onde, além dos recursos da plataforma, serão criados e executados algoritmos em Python, organizados nos _notebooks_. Esses algoritmos serão responsáveis por obter dados, organizá-los, transformá-los e finalmente carregá-los em um esquema SQL. Da obtenção dos dados à consulta, utilizaremos a arquitetura _medallion_, onde na camada bronze armazenaremos os dados brutos, na camada prata os dados limpos e transformados, e na camada ouro os dados prontos para consulta.
 O produto final é um banco de dados SQL que será utilizado para responder às perguntas, por meio de consultas SQL.
 
+!Processo_ETL_medallion.png
+
 ## Pipeline de dados
 ### Esquema do banco de dados
 ### Catálogo de dados
