@@ -43,11 +43,11 @@ A ETL foi construída por um total de 6 _notebooks_, sendo 2 na camada bronze, p
 Também foi criado 1 _notebook_ para consulta SQL.
 
 ### Esquema do banco de dados
-O esquema adotado segue um modelo estrela, com 1 tabela-fato central conectada a 2 tabelas auxiliares. A tabela-fato relaciona eventos sísmicos (terremotos) a instalações do Oleoducto Central, informando também a distância calculada entre o epicentro do terremoto e a localização da instalação. As tabelas auxiliares trazem mais detalhes respectivamente sobre os terremotos e sobre as instalações. As variáveis id e cod funcionam como chave primária e estrangeira, respectivamente nas tabelas auxiliares e tabela-fato. 
-_Observação: do Databricks Community Edition não permite a criação de esquemas SQL com integridade referencial, ou seja, o uso de chaves primárias e estrangeiras. Essa funcionalidade está disponível na versão paga. No entanto com comandos SQL é possível fazer pesquisa em uma tabela considerando informações em outra tabela. Na camada prata é feita uma checagem da variável id, garantindo que não há registros com variável id nulos, em branco ou duplicados, portanto funcionando como chave primária para a tabela terremotos. Basta uma inspeção visual nos dados das instalações para se assegurar de que a variável cod também pode ser usada como chave primária na tabela onde constam os dados sobre as instalações.
+O esquema adotado segue um modelo estrela, com 1 tabela-fato central conectada a 2 tabelas auxiliares. A tabela-fato foi nomeada _impactos_ e relaciona eventos sísmicos (terremotos) a instalações do Oleoducto Central, informando também a distância calculada entre o epicentro do terremoto e a localização da instalação. As tabelas auxiliares foram nomeadas _terremotos_ e _instalacoes_, e trazem mais detalhes respectivamente sobre os terremotos e sobre as instalações. As variáveis _id_ e _codigo_ funcionam como chaves primárias nas respectivas tabelas e como chave estrangeira na tabela _impactos_. 
 
+<img src="./imagens/EsquemaSQL.png" alt="Logo">
 
-
+_Observação: o Databricks Community Edition não permite a criação de esquemas SQL com integridade referencial, ou seja, o uso de chaves primárias e estrangeiras. Essa funcionalidade está disponível na versão paga. No entanto com comandos SQL é possível fazer pesquisa em uma tabela considerando informações em outra tabela. Na camada prata é feita uma checagem da variável id, garantindo que não há registros com variável id nulos, em branco ou duplicados, portanto funcionando como chave primária para a tabela terremotos. Basta uma inspeção visual nos dados das instalações para se assegurar de que a variável codigo também pode ser usada como chave primária na tabela onde constam os dados sobre as instalações._
 
 ### Catálogo de dados
 ## Busca pelos dados
