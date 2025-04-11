@@ -175,13 +175,19 @@ Visão da Estação Cusiana no Google Maps:
 O arquivo csv está disponível aqui: https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/dados-csv/instalacoes_oleoducto_central.csv
 
 ## Coleta e armazenamento de dados
-A coleta e armazenamento dos dados foi realizada pelos 2 notebooks da camada bronze.
+Como visto acima, o arquivo csv com dados das instalações foi gerado manualmente por meio de consultas ao Google Maps, e depois foi carregado para a plataforma Databricks, também manualmente. Neste link para o Youtube vemos o processo de carregamento: https://youtu.be/hEx-HmHy8Fw. O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Bronze%20-%20Notebook%201%20-%20Dados%20das%20Instala%C3%A7%C3%B5es.ipynb">_notebook 1_ da camada bronze</a> executa a leitura deste arquivo csv já carregado no Databricks, o carrega para um _dataframe_ no padrão _PySpark_ e finalmente o salva em formato _Delta Lake_, para ser recuperado posteriormente na camada prata.
 
+Já os dados dos terremotos foram obtidos por meio de consulta à API da USGS e salvos no Databricks em formato _Delta Lake_. Todo este processo foi executado a partir do <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Bronze%20-%20Notebook%202%20-%20Dados%20dos%20terremotos.ipynb">_notebook 2_ da camada bronze</a>.
 
 ## Transformação dos dados
-Camada Prata
+A transformação dos dados acontece em 3 _notebooks_ da camada prata.
 
+O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%201%20-%20Transforma%C3%A7%C3%A3o%20dos%20dados%20das%20instala%C3%A7%C3%B5es.ipynb">_notebook 1_ da camada prata</a> é responsável pela leitura do arquivo _Delta Lake_ gerado pelo _notebook 1_ da camada bronze, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. O único tratamento aplicado aqui é a separação das coordenadas latitude e longitude, que estavam juntas em uma única coluna de vetores, em duas colunas distintas.
 
+O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%202%20-%20Transforma%C3%A7%C3%A3o%20dos%20dados%20dos%20terremotos.ipynb">_notebook 2_ da camada prata</a> é responsável pela leitura do arquivo _Delta Lake_ gerado pelo _notebook 2_ da camada bronze, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. Aqui são executados diversos tratamentos, tais como eliminação de colunas desnecessárias, mudança de nomes de colunas, checagem de valores nulos, em branco e duplicados, reorganização dos dados das coordenadas para colunas individuais e geocodificação. 
+Vale destacar a execução da geocodificação, que neste caso foi a determinação do nome do país onde está o epicentro do terremoto, a partir das coordenadas geográficas latitude e longitude. A geocodificação foi realizada por meio da API Nominatim, que está incluída na biblioteca **geopy**.
+A API Nominatim oferece consultas limitadas a 1 por segundo. Por este motivo foi incluída uma instrução no código python para pausar 1 segundo entre as consultas. Isso faz com o que código fique lento. Para aproximadamente 400 consultas, o código é executado em 6 a 7 minutos.
+A biblioteca **geopy não está disponível por padrão no ambiente disponibilizado quando se cria um cluster Databricks**. É necessário adicionar a biblioteca manualmente na configuração do cluster. 
 
 ## Carga dos dados
 Camada Ouro
@@ -195,15 +201,6 @@ Camada Ouro
 
 
 
-
-O objetivo deste trabalho desenvolver uma aplicação de engenharia de dados que nos permita responder às seguintes questões:
-- qual a frequência de ocorrências de terremotos com magnitude maior do que 5 na Colômbia?
-- qual a média e o desvio padrão da magnitude destes terremotos?
-
-Mais especificamente, considerando um conjunto de locais de interesse, vamos responder à seguinte pergunta:
-- com que frequencia um evento sístimo de intensidade maior ou igual a 5 ocorre a menos de 200km destes pontos de interesse?
-- qual destes pontos de interesse foi o mais afetado nos últimos 20 anos?
-- 
 
 Links importantes:
 Documentação da API do USGS:
