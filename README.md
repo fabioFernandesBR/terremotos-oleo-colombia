@@ -242,7 +242,16 @@ A USGS é uma instituição de grande credibilidade e implementa controles rigor
 O escopo deste trabalho foi limitado ao Oleoducto Central, e neste sentido os dados estão completos e de boa qualidade.
 
 ## Auto avaliação
+O resultado final do _pipeline_ pode ser considerado satisfatório, considerando os seguintes aspectos:
+- O _pipeline_ é capaz de ler e persistir dados de fontes externas, como a API Earthquake Catalog.
+- O processo de transformação está automatizado.
+- Os dados transformados e organizados são disponibilizados para consulta via SQL.
+- A consulta SQL traz respostas relevantes para as perguntas formuladas na definição do problema.
 
+### Considerações gerais
+- Apesar das limitações da versão gratuita Community Edition, o Databricks se mostrou uma plataform eficaz para este tipo de projeto. A integração entre o armazenamento de dados, seja em formato csv, em _Delta Lakes_ ou em SQL, e os _notebooks_ com códigos Python é muito eficiente. Também é bastante fácil instalar bibliotecas no _cluster_, como a geopy.
+- O uso de _notebooks_ permite uma abordagem interativa com os dados, analisando passo a passa, escolhendo quais variáveis permanecerão e quais serão eliminadas. Ainda assim, as etapas referentes à análise e interpretação dos dados são muito rápidas, portanto é interessante manter estes códigos no _notebook_, como documentação da linha de pensamento do analista.
+- A etapa mais demorada é a geocodificação feita pela API Nominatim do geopy. Ainda assim é um processo rápido e simples, que dispensa uso de outras bases de dados e algoritmos complexos, sendo poucas linhas de código suficientes para esta finalidade.
 
 
 ### Sugestões de próximos passos
@@ -250,12 +259,6 @@ O escopo deste trabalho foi limitado ao Oleoducto Central, e neste sentido os da
 - Incluir os dutos no escopo da pesquisa. Enquanto as estações são pontuais, sendo representadas por 1 par de coordenadas (latitude e longitude), os dutos que conectam estas estações possuem um conjunto de coordenadas que representam o traçado do duto. Implementar essa mudança exigiria novas fontes de dados e diversas adaptações nos algoritmos e estruturas de dados das camadas bronze, prata e ouro. O benefício seria aumentar a granularidade da análise.
 - Incluir outras fontes de riscos geotécnicos, além da Earthquake Catalog. Por exemplo, bases de dados que registrem terremotos de magnitudes mais baixas, ou bases de dados sobre outros fenômenos, como deslizamentos de terra provocados por chuvas.
 - Finalmente, o pipeline que foi criado poderia evoluir para um sistema de alerta, que monitore diariamente as bases de dados de eventos geotécnicos (terremotos, tsunamis, deslizamentos de terra) e diariamente avalie se o potencial de impacto destes eventos em instalações de interesse, publicando alertas (_emails_, mensagens SMS, publicações em redes sociais etc) sempre que um potencial impacto for detectado.
-
-
-
-
-
-
 
 ## Adição da biblioteca geopy na configuração do cluster Databricks
 O processo para incluir a biblioteca **geopy** no cluster Databricks, o equivalente a executar um comando pip install geopy em um ambiente de desenvolvimento como o VS Code, é uma operação simples. As imagens a seguir mostram o passo a passo. É necessário realizar este procedimento para se executar dois dos _notebooks_ da camada prata.
