@@ -104,7 +104,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 - **Nome da Coluna:** prop_url
   - **Tipo de Dados:** VARCHAR(1024)
   - **Descrição:** URL para o cadastro do terremoto no site do USGS, onde o usuário poderá buscar informações mais detalhadas sobre o evento.
-  - **Exemplo de Valor:** [https://earthquak](https://earthquake.usgs.gov/earthquakes/eventpage/at00sthakw/executive)
+  - **Exemplo de Valor:** https://earthquake.usgs.gov/earthquakes/eventpage/at00sthakw/executive
  
 - **Nome da Coluna:** latitude
   - **Tipo de Dados:** DOUBLE
@@ -149,7 +149,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 
 #### Qualidade dos Dados
 - **Completude:** 100% dos dados sobre as instalações que compõem o Oleoducto Central, 100% dos dados sobre os terremotos com magnitude >= 5 cuja ocorrência tem epicentro em um raio de até 1000km de um ponto central da Colômbia.
-- **A qualidade dos dados é altamente dependente da qualidade dos dados disponibilizados pela USGS por meio de sua API.
+**A qualidade dos dados é altamente dependente da qualidade dos dados disponibilizados pela USGS por meio de sua API.**
 
 #### Governança
 - **Políticas de Acesso:** A base de dados SQL está disponível apenas na minha conta no Databricks Community Edition, porém o arquivo csv com informações sobre as instalações está disponível neste repositório (aqui) e nos _notebooks_ estão os códigos para leitura de dados, inclusive da API da USGS, todo o processamento das camadas bronze, prata e ouro, portanto é possível replicar a criação da base de dados SQL.
@@ -162,13 +162,30 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 - **Responsável:** Fábio Fernandes
 
 
-
-
-
 ## Busca pelos dados
+
+2 fontes de dados foram usadas: API do USGS (https://earthquake.usgs.gov/fdsnws/event/1/query) e uma tabela em formato csv contendo a localização / coordenadas das instalações e a empresa responsável pela operação. Essa tabela csv foi construída manualmente pelo autor a partir de buscas no Google Maps. As buscas no Google Maps tiveram como base a relação de instalações do Oleoducto Central, disponível no site da Ocensa e na Wikipedia.
+
+Visão do Terminal Coveñas no Google Maps:
+<img src=".\imagens\googlemapscovenas.png">
+
+Visão da Estação Cusiana no Google Maps:
+<img src=".\imagens\googlemapscusiana.png">
+
+O arquivo csv está disponível aqui: https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/dados-csv/instalacoes_oleoducto_central.csv
+
 ## Coleta e armazenamento de dados
+A coleta e armazenamento dos dados foi realizada pelos 2 notebooks da camada bronze.
+
+
 ## Transformação dos dados
+Camada Prata
+
+
+
 ## Carga dos dados
+Camada Ouro
+
 ## Análise
 ### Qualidade dos dados
 ### Respostas às perguntas
