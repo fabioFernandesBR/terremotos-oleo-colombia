@@ -196,7 +196,7 @@ O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/mai
 No <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Ouro%20-%20Notebook%20%C3%BAnico%20-%20Esquema%20SQL.ipynb">_notebook_ único</a> da camada ouro, os 3 arquivos _Delta Lake_ da camada prata são recuperados, o esquema SQL é criado, e os dados dos _Delta Lakes_ são carregados no banco de dados SQL.
 
 ## Análise
-Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Consultas.ipynb">_notebook_ consultas </a> implementa _queries_ SQL, para obter respostas para as perguntas que fazem parte do objetivo da pesquisa.
+Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Consultas.ipynb">_notebook_ consultas </a> implementa _queries_ SQL, para obter respostas para as perguntas que fazem parte do objetivo da pesquisa. Neste link do Youtube, vemos a execução da consulta: https://youtu.be/whzblrT_Uxc.
 
 ### Respostas às perguntas
 **Pergunta:** Qual a frequência de ocorrências de terremotos com magnitude maior do que 5 na Colômbia?
@@ -214,7 +214,8 @@ Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colom
 ### Qualidade dos dados
 
 ## Auto avaliação
-### Sugestão de próximos passos
+### Sugestões de próximos passos
+- Aumentar a lista de instalações de interesse. Neste trabalho, foram usadas algumas estações do Oleoducto Central, mas existem muitas outras estações pertencentes a outros ramais de transporte de óleo ou gás. Além disso, poderia se incluir os próprio dutos no escopo da pesquisa. A grande diferença é 
 
 
 
