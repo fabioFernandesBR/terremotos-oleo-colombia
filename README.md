@@ -149,7 +149,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 
 #### Qualidade dos Dados
 - **Completude:** 100% dos dados sobre as instalações que compõem o Oleoducto Central, 100% dos dados sobre os terremotos com magnitude >= 5 cuja ocorrência tem epicentro em um raio de até 1000km de um ponto central da Colômbia.
-**A qualidade dos dados é altamente dependente da qualidade dos dados disponibilizados pela USGS por meio de sua API.**
+**A qualidade dos dados é altamente dependente da qualidade dos dados disponibilizados pela USGS por meio de sua API <ins>Earthquake Catalog</ins>.**
 
 #### Governança
 - **Políticas de Acesso:** A base de dados SQL está disponível apenas na minha conta no Databricks Community Edition, porém o arquivo csv com informações sobre as instalações está disponível neste repositório (aqui) e nos _notebooks_ estão os códigos para leitura de dados, inclusive da API da USGS, todo o processamento das camadas bronze, prata e ouro, portanto é possível replicar a criação da base de dados SQL.
@@ -164,7 +164,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 
 ## Busca pelos dados
 
-2 fontes de dados foram usadas: API do USGS (https://earthquake.usgs.gov/fdsnws/event/1/query) e uma tabela em formato csv contendo a localização / coordenadas das instalações e a empresa responsável pela operação. Essa tabela csv foi construída manualmente pelo autor a partir de buscas no Google Maps. As buscas no Google Maps tiveram como base a relação de instalações do Oleoducto Central, disponível no site da Ocensa e na Wikipedia.
+2 fontes de dados foram usadas: API Earthquake Catalog do USGS (https://earthquake.usgs.gov/fdsnws/event/1/query) e uma tabela em formato csv contendo a localização / coordenadas das instalações e a empresa responsável pela operação. Essa tabela csv foi construída manualmente pelo autor a partir de buscas no Google Maps. As buscas no Google Maps tiveram como base a relação de instalações do Oleoducto Central, disponível no site da Ocensa e na Wikipedia.
 
 Visão do Terminal Coveñas no Google Maps:
 <img src=".\imagens\googlemapscovenas.png">
@@ -177,7 +177,24 @@ O arquivo csv está disponível aqui: https://github.com/fabioFernandesBR/terrem
 ## Coleta e armazenamento de dados
 Como visto acima, o arquivo csv com dados das instalações foi gerado manualmente por meio de consultas ao Google Maps, e depois foi carregado para a plataforma Databricks, também manualmente. Neste link para o Youtube vemos o processo de carregamento: https://youtu.be/hEx-HmHy8Fw. O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Bronze%20-%20Notebook%201%20-%20Dados%20das%20Instala%C3%A7%C3%B5es.ipynb">_notebook 1_ da camada bronze</a> executa a leitura deste arquivo csv já carregado no Databricks, o carrega para um _dataframe_ no padrão _PySpark_ e finalmente o salva em formato _Delta Lake_, para ser recuperado posteriormente na camada prata.
 
-Já os dados dos terremotos foram obtidos por meio de consulta à API da USGS e salvos no Databricks em formato _Delta Lake_. Todo este processo foi executado a partir do <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Bronze%20-%20Notebook%202%20-%20Dados%20dos%20terremotos.ipynb">_notebook 2_ da camada bronze</a>.
+Já os dados dos terremotos foram obtidos por meio de consulta à API Earthquake Catalog da USGS e salvos no Databricks em formato _Delta Lake_. Todo este processo foi executado a partir do <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Bronze%20-%20Notebook%202%20-%20Dados%20dos%20terremotos.ipynb">_notebook 2_ da camada bronze</a>. 
+
+Os parâmetros a seguir foram utilizados:  
+params = {  
+    "format": "geojson",  
+    "starttime": "2005-01-01", ### buscando aproximadamente dados dos últimos 20 anos  
+    "endtime": datetime.now().strftime("%Y-%m-%d"), ### para buscar dados mais recentes  
+    "minmagnitude": 5, ### magnitude mínima  
+    "latitude": 4.570868, ### latitude da coordenada central da Colômbia  
+    "longitude": -74.297333, ### longitude da coordenada central da Colômbia  
+    "maxradiuskm": 1000 ### raio de busca de 1000km a partir da coordenada central, o que faz com que também sejam retornados dados de terremotos ocorridos fora da Colômbia  
+}
+
+Para mais informações sobre como executar a _query_ à API Earthquake Catalog da USGS, e como interpretar seus resultados, consultar a documentação da API da USGS abaixo.
+
+### Documentação da API da USGS:
+Como realizar a consulta: https://earthquake.usgs.gov/fdsnws/event/1/.  
+Sobre os resultados da consulta: https://earthquake.usgs.gov/data/comcat/index.php.
 
 ## Transformação dos dados
 A transformação dos dados acontece em 3 _notebooks_ da camada prata.
@@ -188,7 +205,6 @@ O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/mai
 Vale destacar a execução da geocodificação, que neste caso foi a determinação do nome do país onde está o epicentro do terremoto, a partir das coordenadas geográficas latitude e longitude. A geocodificação foi realizada por meio da API Nominatim, que está incluída na biblioteca **geopy**.
 A API Nominatim oferece consultas limitadas a 1 por segundo. Por este motivo foi incluída uma instrução no código python para pausar 1 segundo entre as consultas. Isso faz com o que código fique lento. Para aproximadamente 400 consultas, o código é executado em 6 a 7 minutos.
 A biblioteca **geopy não está disponível por padrão no ambiente disponibilizado quando se cria um cluster Databricks**. É necessário instalar a biblioteca manualmente na configuração do cluster. Na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adição-da-biblioteca-geopy-na-configuração-do-cluster-databricks) mostramos como deve ser feita esta instalação.
-Na seção #adição-da-biblioteca-geopy-na-configuração-do_cluster-databricks mostramos como deve ser feita esta instalação.
 
 O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%203%20-%20Avaliacao%20do%20impacto%20dos%20terremotos%20nas%20instala%C3%A7%C3%B5es.ipynb">_notebook 3_ da camada prata</a> é responsável pela leitura dos dois arquivos _Delta Lake_ gerado pelos _notebooks_ 1 e 2 da camada prata, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. O primeiro tratamento aplicado aqui é o _crossJoin_ dos _dataframes_ de terremotos e instalações, resultando em um terceiro _dataframe_ que contém todos os cruzamentos entre os registros dos dois primeiros _dataframes_. Então, para cada terremoto-instalação, é realizado o cálculo da distância entre o epicentro do terremoto e a instalação. Em seguida, é estimado se houve (impacto=1) ou não (impacto=0) impacto do terremoto na instalação, usando uma heurística simples que combina distância e magnitude. O _dataframe_ é filtrado, eliminando todas as linhas onde impacto = 0, ou seja, só permanecem no _dataframe_ as linhas onde se estima que houve impacto. Por fim, o dataframe final é persistido como um _Delta lake_. É importante ressaltar que o cálculo da distância entre epicentro do terremoto e instalação também utiliza a biblioteca **geopy**, portanto as instruções contidas na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adição-da-biblioteca-geopy-na-configuração-do-cluster-databricks) devem ter sido executadas para que este _notebook_ possa funcionar.
 
@@ -212,19 +228,22 @@ Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colom
 **Resposta:** A Estação El Porvenir, da Ocensa, foi impactada 6 vezes ao longo de 20 anos.
 
 ### Qualidade dos dados
+A USGS é uma instituição de grande credibilidade e implementa controles rigorosos para adições de dados em suas bases. No entanto há limitações na disponibilidade dos dados: terremotos de magnitude baixa (menor do que 4.5) normalmente não são registrados.
+
+O escopo deste trabalho foi limitado ao Oleoducto Central, e neste sentido os dados estão completos e de boa qualidade.
 
 ## Auto avaliação
 ### Sugestões de próximos passos
-- Aumentar a lista de instalações de interesse. Neste trabalho, foram usadas algumas estações do Oleoducto Central, mas existem muitas outras estações pertencentes a outros ramais de transporte de óleo ou gás. Além disso, poderia se incluir os próprio dutos no escopo da pesquisa. A grande diferença é 
+- Aumentar a lista de instalações. Neste trabalho, foram catalogadas as estações do Oleoducto Central, mas existem muitas outras estações pertencentes a outros ramais de transporte de óleo ou gás.
+- Incluir os dutos no escopo da pesquisa. Enquanto as estações são pontuais, sendo representadas por 1 par de coordenadas (latitude e longitude), os dutos que conectam estas estações possuem um conjunto de coordenadas que representam o traçado do duto. Implementar essa mudança exigiria novas fontes de dados e diversas adaptações nos algoritmos e estruturas de dados das camadas bronze, prata e ouro. O benefício seria aumentar a granularidade da análise.
+- Incluir outras fontes de riscos geotécnicos, além da Earthquake Catalog. Por exemplo, bases de dados que registrem terremotos de magnitudes mais baixas, ou bases de dados sobre outros fenômenos, como deslizamentos de terra provocados por chuvas.
+- Finalmente, o pipeline que foi criado poderia evoluir para um sistema de alerta, que monitore diariamente as bases de dados de eventos geotécnicos (terremotos, tsunamis, deslizamentos de terra) e diariamente avalie se o potencial de impacto destes eventos em instalações de interesse, publicando alertas (_emails_, mensagens SMS, publicações em redes sociais etc) sempre que um potencial impacto for detectado.
 
 
 
 
 
-Links importantes:
-Documentação da API do USGS:
-query: https://earthquake.usgs.gov/fdsnws/event/1/
-output: https://earthquake.usgs.gov/data/comcat/index.php
+
 
 ## Adição da biblioteca geopy na configuração do cluster Databricks
 O processo para incluir a biblioteca **geopy** no cluster Databricks, o equivalente a executar um comando pip install geopy em um ambiente de desenvolvimento como o VS Code, é uma operação simples. As imagens a seguir mostram o passo a passo. É necessário realizar este procedimento para se executar dois dos _notebooks_ da camada prata.
