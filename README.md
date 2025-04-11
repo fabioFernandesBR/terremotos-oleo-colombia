@@ -1,5 +1,5 @@
 # MVP Sprint - Engenharia de Dados - PUC RIO
-# Pipeline de Dados para Análise de ocorrência de terremotos e seus impactos na infraestrutura de transporte de óleo na Colômbia.
+# Pipeline de Dados para Análise de ocorrência de terremotos e seus impactos na infraestrutura de transporte de petróleo na Colômbia.
 **Autor: Fábio Fernandes**
 
 ## Contexto
