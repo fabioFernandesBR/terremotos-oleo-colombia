@@ -27,7 +27,7 @@ Para responder a algumas perguntas relacionadas à ocorrência de terremotos na 
 - Qual a frequência de ocorrências de terremotos com magnitude maior do que 5 na Colômbia?
 - Qual a média e o desvio padrão da magnitude destes terremotos?
 - Com que frequência um evento sísmico de magnitude maior ou igual a 5 ocorre a menos de 200km de alguma das estações do Oleoducto Central?
-- Qual das estações do Oleoducto Central foi mais vezes impactada por terremotos de intensidade maior do que 5?
+- Qual das estações do Oleoducto Central foi mais vezes impactada por terremotos de magnitude maior do que 5?
 
 ### Estratégia de Implementação
 Este _pipeline_ de dados foi implementado na plataforma _Databricks Community Edition_, onde, além dos recursos da plataforma, foram criados e executados algoritmos em Python, organizados nos _notebooks_. Esses algoritmos são responsáveis por obter dados, organizá-los, transformá-los e finalmente carregá-los em um esquema SQL. Da obtenção dos dados à consulta, utilizamos a arquitetura _medallion_, onde na camada bronze armazenamos os dados brutos; na camada prata, os dados limpos e transformados; e na camada ouro, os dados prontos para consulta.
@@ -187,7 +187,7 @@ O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/mai
 O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%202%20-%20Transforma%C3%A7%C3%A3o%20dos%20dados%20dos%20terremotos.ipynb">_notebook 2_ da camada prata</a> é responsável pela leitura do arquivo _Delta Lake_ gerado pelo _notebook 2_ da camada bronze, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. Aqui são executados diversos tratamentos, tais como eliminação de colunas desnecessárias, mudança de nomes de colunas, checagem de valores nulos, em branco e duplicados, reorganização dos dados das coordenadas para colunas individuais e geocodificação. 
 Vale destacar a execução da geocodificação, que neste caso foi a determinação do nome do país onde está o epicentro do terremoto, a partir das coordenadas geográficas latitude e longitude. A geocodificação foi realizada por meio da API Nominatim, que está incluída na biblioteca **geopy**.
 A API Nominatim oferece consultas limitadas a 1 por segundo. Por este motivo foi incluída uma instrução no código python para pausar 1 segundo entre as consultas. Isso faz com o que código fique lento. Para aproximadamente 400 consultas, o código é executado em 6 a 7 minutos.
-A biblioteca **geopy não está disponível por padrão no ambiente disponibilizado quando se cria um cluster Databricks**. É necessário adicionar a biblioteca manualmente na configuração do cluster. 
+A biblioteca **geopy não está disponível por padrão no ambiente disponibilizado quando se cria um cluster Databricks**. É necessário instalar a biblioteca manualmente na configuração do cluster. Na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adicao_da_biblioteca_geopy_na_configuracao_do_cluster_databricks) mostramos como deve ser feita esta instalação.
 
 ## Carga dos dados
 Camada Ouro
@@ -206,3 +206,18 @@ Links importantes:
 Documentação da API do USGS:
 query: https://earthquake.usgs.gov/fdsnws/event/1/
 output: https://earthquake.usgs.gov/data/comcat/index.php
+
+## Adição da biblioteca geopy na configuração do cluster Databricks
+O processo para incluir a biblioteca **geopy** no cluster Databricks, o equivalente a executar um comando pip install geopy em um ambiente de desenvolvimento como o VS Code, é uma operação simples. As imagens a seguir mostram o passo a passo. É necessário realizar este procedimento para se executar dois dos _notebooks_ da camada prata.
+
+**Passo 1:** Clicar no cluster para abrir a caixa de diálogo para configuração manual e clicar na aba **Libraries**.
+<img src=".\imagens\configmanual.png">
+
+**Passo 2:** Clicar em **Install new**.
+<img src=".\imagens\installnew.png">
+
+**Passo 3:** Selecionar a opção **PyPI** e escrever **geopy** no campo correspondente. Finalmente clicar em **Install**.
+<img src=".\imagens\pypi.png">
+
+
+
