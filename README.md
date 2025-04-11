@@ -84,6 +84,8 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
   - **Tipo de Dados:** DOUBLE
   - **Descrição:** Distância calculada entre o epicentro do terremoto (coordenadas latitude e longitude) e as coordenadas latitude e longitude da instalação.
   - **Exemplo de Valor:** 202
+  - **Mínimo esperado:** 0
+  - **Máximo esperado:** 2000
 
 ##### Tabela: terremotos
 - **Nome da Coluna:** id
@@ -95,11 +97,14 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
   - **Tipo de Dados:** Date
   - **Descrição:** Data de ocorrência do terremoto
   - **Exemplo de Valor:** 2025-03-15
-
+  - **Mínimo esperado:** 2005-01-01
+  
 - **Nome da Coluna:** prop_mag
   - **Tipo de Dados:** Double
   - **Descrição:** Magnitude do terremoto
   - **Exemplo de Valor:** 7.8
+  - **Mínimo esperado:** 5.0
+  - **Máximo esperado:** 10.0
 
 - **Nome da Coluna:** prop_url
   - **Tipo de Dados:** VARCHAR(1024)
@@ -110,11 +115,15 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
   - **Tipo de Dados:** DOUBLE
   - **Descrição:** latitude da ocorrência do terremoto
   - **Exemplo de Valor:** 7.2
+  - **Mínimo esperado:** -7
+  - **Máximo esperado:** 15
  
 - **Nome da Coluna:** longitude
   - **Tipo de Dados:** DOUBLE
   - **Descrição:** longitude da ocorrência do terremoto
   - **Exemplo de Valor:** -82.3
+  - **Mínimo esperado:** -67
+  - **Máximo esperado:** -80
  
 - **Nome da Coluna:** pais
   - **Tipo de Dados:** VARCHAR(255)
@@ -135,7 +144,7 @@ _Observação: o Databricks Community Edition não permite a criação de esquem
 - **Nome da Coluna:** operador
   - **Tipo de Dados:** VARCHAR(255) 
   - **Descrição:** Empresa que opera a instalação
-  - **Exemplo de Valor:** Ocensa
+  - **Exemplos de Valor:** Ocensa, CENIT, Ecopetrol
  
 - **Nome da Coluna:** latitude_instalacao
   - **Tipo de Dados:** DOUBLE
@@ -185,8 +194,8 @@ params = {
     "starttime": "2005-01-01", ### buscando aproximadamente dados dos últimos 20 anos  
     "endtime": datetime.now().strftime("%Y-%m-%d"), ### para buscar dados mais recentes  
     "minmagnitude": 5, ### magnitude mínima  
-    "latitude": 4.570868, ### latitude da coordenada central da Colômbia  
-    "longitude": -74.297333, ### longitude da coordenada central da Colômbia  
+    "latitude": 4.570868, ### latitude da coordenada central da Colômbia, próximo a Bogotá  
+    "longitude": -74.297333, ### longitude da coordenada central da Colômbia, próximo a Bogotá  
     "maxradiuskm": 1000 ### raio de busca de 1000km a partir da coordenada central, o que faz com que também sejam retornados dados de terremotos ocorridos fora da Colômbia  
 }
 
@@ -228,11 +237,14 @@ Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colom
 **Resposta:** A Estação El Porvenir, da Ocensa, foi impactada 6 vezes ao longo de 20 anos.
 
 ### Qualidade dos dados
-A USGS é uma instituição de grande credibilidade e implementa controles rigorosos para adições de dados em suas bases. No entanto há limitações na disponibilidade dos dados: terremotos de magnitude baixa (menor do que 4.5) normalmente não são registrados.
+A USGS é uma instituição de grande credibilidade e implementa controles rigorosos para adições de dados em suas bases. No _notebook_ 2 da camada prata, onde é feito o tratamento No entanto há limitações na disponibilidade dos dados: terremotos de magnitude baixa (menor do que 4.5) normalmente não são registrados.
 
 O escopo deste trabalho foi limitado ao Oleoducto Central, e neste sentido os dados estão completos e de boa qualidade.
 
 ## Auto avaliação
+
+
+
 ### Sugestões de próximos passos
 - Aumentar a lista de instalações. Neste trabalho, foram catalogadas as estações do Oleoducto Central, mas existem muitas outras estações pertencentes a outros ramais de transporte de óleo ou gás.
 - Incluir os dutos no escopo da pesquisa. Enquanto as estações são pontuais, sendo representadas por 1 par de coordenadas (latitude e longitude), os dutos que conectam estas estações possuem um conjunto de coordenadas que representam o traçado do duto. Implementar essa mudança exigiria novas fontes de dados e diversas adaptações nos algoritmos e estruturas de dados das camadas bronze, prata e ouro. O benefício seria aumentar a granularidade da análise.
