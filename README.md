@@ -190,14 +190,29 @@ A API Nominatim oferece consultas limitadas a 1 por segundo. Por este motivo foi
 A biblioteca **geopy não está disponível por padrão no ambiente disponibilizado quando se cria um cluster Databricks**. É necessário instalar a biblioteca manualmente na configuração do cluster. Na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adição-da-biblioteca-geopy-na-configuração-do-cluster-databricks) mostramos como deve ser feita esta instalação.
 Na seção #adição-da-biblioteca-geopy-na-configuração-do_cluster-databricks mostramos como deve ser feita esta instalação.
 
-O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%203%20-%20Avaliacao%20do%20impacto%20dos%20terremotos%20nas%20instala%C3%A7%C3%B5es.ipynb">_notebook 3_ da camada prata</a> é responsável pela leitura dos dois arquivos _Delta Lake_ gerado pelos _notebooks_ 1 e 2 da camada prata, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. O primeiro tratamento aplicado aqui é o _crossJoin_ dos _dataframes_ de terremotos e instalações, resultando em um terceiro _dataframe_ que contém todos os cruzamentos entre os registros dos dois primeiros _dataframes_. Então, para cada terremoto-instalação, é realizado o cálculo da distância entre o epicentro do terremoto e a instalação. Em seguida, é estimado se houve (impacto=1) ou não (impacto=0) impacto do terremoto na instalação, usando uma heurística simples que combina distância e magnitude. O dataset é filtrado, eliminando todas as linhas onde impacto = 0, ou seja, só permanecem no dataframe as linhas onde se estima que houve impacto. Por fim, o dataframe final é persistido como um _Delta lake_. É importante ressaltar que o cálculo da distância entre epicentro do terremoto e instalação também utiliza a biblioteca **geopy**, portanto as instruções contidas na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adição-da-biblioteca-geopy-na-configuração-do-cluster-databricks) devem ter sido executadas para que este _notebook_ possa funcionar.
+O <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Prata%20-%20Notebook%203%20-%20Avaliacao%20do%20impacto%20dos%20terremotos%20nas%20instala%C3%A7%C3%B5es.ipynb">_notebook 3_ da camada prata</a> é responsável pela leitura dos dois arquivos _Delta Lake_ gerado pelos _notebooks_ 1 e 2 da camada prata, pelo tratamento dos dados, e por fim em salvar os dados tratados em outro arquivo _Delta Lake_. O primeiro tratamento aplicado aqui é o _crossJoin_ dos _dataframes_ de terremotos e instalações, resultando em um terceiro _dataframe_ que contém todos os cruzamentos entre os registros dos dois primeiros _dataframes_. Então, para cada terremoto-instalação, é realizado o cálculo da distância entre o epicentro do terremoto e a instalação. Em seguida, é estimado se houve (impacto=1) ou não (impacto=0) impacto do terremoto na instalação, usando uma heurística simples que combina distância e magnitude. O _dataframe_ é filtrado, eliminando todas as linhas onde impacto = 0, ou seja, só permanecem no _dataframe_ as linhas onde se estima que houve impacto. Por fim, o dataframe final é persistido como um _Delta lake_. É importante ressaltar que o cálculo da distância entre epicentro do terremoto e instalação também utiliza a biblioteca **geopy**, portanto as instruções contidas na seção [Adição da biblioteca geopy na configuração do cluster Databricks](#adição-da-biblioteca-geopy-na-configuração-do-cluster-databricks) devem ter sido executadas para que este _notebook_ possa funcionar.
 
 ## Carga dos dados
-Camada Ouro
+No <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Camada%20Ouro%20-%20Notebook%20%C3%BAnico%20-%20Esquema%20SQL.ipynb">_notebook_ único</a> da camada ouro, os 3 arquivos _Delta Lake_ da camada prata são recuperados, o esquema SQL é criado, e os dados dos _Delta Lakes_ são carregados no banco de dados SQL.
 
 ## Análise
-### Qualidade dos dados
+Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colombia/blob/main/notebooks/Consultas.ipynb">_notebook_ consultas </a> implementa _queries_ SQL, para obter respostas para as perguntas que fazem parte do objetivo da pesquisa.
+
 ### Respostas às perguntas
+**Pergunta:** Qual a frequência de ocorrências de terremotos com magnitude maior do que 5 na Colômbia?
+**Resposta:** No intervalo de 20 anos, foram registrados 105 terremotos na Colômbia, resultando em uma média de 5 terremotos com magnitude maior do que 5 na Colômbia por ano.
+
+**Pergunta:** Qual a média e o desvio padrão da magnitude destes terremotos?
+**Resposta:** Média da magnitude: 5.319047619047618 / Desvio padrão da magnitude: 0.43964479501928116
+
+**Pergunta:** Com que frequência um evento sísmico de magnitude maior ou igual a 5 ocorre a menos de 200km de alguma das estações do Oleoducto Central?
+**Resposta:** No intervalo de 20 anos, foram registrados 36 terremotos na Colômbia com mangnitude maior do que cujo epicentro está a menos de 200km de alguma instalação do Oleoducto Central, resultando em uma média de 1.8 terremotos por ano com estas características.
+
+**Pergunta:** Qual das estações do Oleoducto Central foi mais vezes impactada por terremotos de magnitude maior do que 5?
+**Resposta:** A Estação El Porvenir, da Ocensa, foi impactada 6 vezes ao longo de 20 anos.
+
+### Qualidade dos dados
+
 ## Auto avaliação
 ### Sugestão de próximos passos
 
