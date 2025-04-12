@@ -5,7 +5,7 @@
 ## Contexto
 A Colômbia é um país da América do Sul localizado sobre a cadeia dos Andes, uma região montanhosa geologicamente instável, com elevada ocorrência de eventos sísmicos.
 
-Ao mesmo tempo, é um importante produtor e consumidor de petróleo, gás e derivados de petróleo, com uma extensa rede de oleodutos e gasodutos para transporte deste produtos, além de terminais de transporte e tanques de estocagem. Como destaque, o Oleoducto Central é um oleoduto de petróleo bruto, que começa em Cusiana, região produtora, e vai até o terminal marítimo de Coveñas, no Caribe.
+Ao mesmo tempo, é um importante produtor e consumidor de petróleo, gás e derivados de petróleo, com uma extensa rede de oleodutos e gasodutos para transporte deste produtos, além de terminais de transporte e tanques de estocagem. Como destaque, o **Oleoducto Central** é um oleoduto de petróleo bruto, que começa em Cusiana, região produtora, e vai até o terminal marítimo de Coveñas, no Caribe.
 <img src="./imagens/Oleoducto_Central.png">
 _Ver mais em:_ <a href="https://en-m-wikipedia-org.translate.goog/wiki/Ocensa_pipeline?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt&_x_tr_pto=sge#:~:text=O%20oleoduto%20Ocensa%20(%20Oleoducto%20Central,SA%20%2C%20Petrominerales%20e%20Triton%20Colombia)">Wikipedia do Oleoducto Central.</a>
 
@@ -237,7 +237,8 @@ Finalmente, o <a href="https://github.com/fabioFernandesBR/terremotos-oleo-colom
 **Resposta:** A Estação El Porvenir, da Ocensa, foi impactada 6 vezes ao longo de 20 anos.
 
 ### Qualidade dos dados
-A USGS é uma instituição de grande credibilidade e implementa controles rigorosos para adições de dados em suas bases. No _notebook_ 2 da camada prata, onde é feito o tratamento No entanto há limitações na disponibilidade dos dados: terremotos de magnitude baixa (menor do que 4.5) normalmente não são registrados.
+A USGS é uma instituição de grande credibilidade e implementa controles rigorosos para adições de dados em suas bases. No _notebook_ 2 da camada prata, onde é feito o tratamento de dados, são implementados controles da qualidade dos dados, como checagens de valores nulos, e no caso da variável id, que foi utilizada posteriormente como chave primária da tabela, verificouse que não havia também valores duplicados ou em branco.
+No entanto há limitações na disponibilidade dos dados: terremotos de magnitude baixa (menor do que 4.5) normalmente não são registrados.
 
 O escopo deste trabalho foi limitado ao Oleoducto Central, e neste sentido os dados estão completos e de boa qualidade.
 
@@ -260,7 +261,8 @@ O resultado final do _pipeline_ pode ser considerado satisfatório, considerando
 - Incluir outras fontes de riscos geotécnicos, além da Earthquake Catalog. Por exemplo, bases de dados que registrem terremotos de magnitudes mais baixas, ou bases de dados sobre outros fenômenos, como deslizamentos de terra provocados por chuvas.
 - Finalmente, o pipeline que foi criado poderia evoluir para um sistema de alerta, que monitore diariamente as bases de dados de eventos geotécnicos (terremotos, tsunamis, deslizamentos de terra) e diariamente avalie se o potencial de impacto destes eventos em instalações de interesse, publicando alertas (_emails_, mensagens SMS, publicações em redes sociais etc) sempre que um potencial impacto for detectado.
 
-## Adição da biblioteca geopy na configuração do cluster Databricks
+## Anexos
+### Adição da biblioteca geopy na configuração do cluster Databricks
 O processo para incluir a biblioteca **geopy** no cluster Databricks, o equivalente a executar um comando pip install geopy em um ambiente de desenvolvimento como o VS Code, é uma operação simples. As imagens a seguir mostram o passo a passo. É necessário realizar este procedimento para se executar dois dos _notebooks_ da camada prata.
 
 **Passo 1:** Clicar no cluster para abrir a caixa de diálogo para configuração manual e clicar na aba **Libraries**.
